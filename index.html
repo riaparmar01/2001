@@ -1,0 +1,629 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Australian Tourism</title>
+  <script src="https://cdn.jsdelivr.net/npm/vega@5"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vega-lite@5"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vega-embed@6"></script>
+
+  <!-- Import Google Fonts for headings and body text -->
+  <link href="https://fonts.googleapis.com/css2?family=Lobster&family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+
+  <style>
+    body {
+      font-family: 'Roboto', sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin: 0;
+      padding: 0;
+      background-color: #FFE5B4;
+    }
+    .chart-container {
+      width: 100%;
+      max-width: 600px;
+      margin: 0px auto;
+      padding: 0;  
+      text-align: center;
+    }
+    .chart-row {
+      display: flex;
+      justify-content: space-between; /* Keep them close together */
+      align-items: center;
+      gap: 30px;  /* Reduce the gap */
+      width: 100%;
+      max-width: 850px;  /* Reduce overall width */
+      margin: 20px auto;
+    }
+    .overall-title {
+      font-family: 'Lobster', cursive;
+      font-size: 50px; 
+      font-weight: bold;
+      margin: 1px 0;
+      text-align: center;
+    }
+    .subheading {
+      font-family: 'Lobster', cursive;
+      font-size: 26px; 
+      font-weight: bold;
+      margin-top: 5px;  
+      margin-bottom: 10px;
+      text-align: center;
+    }
+    .centered-text {
+      max-width: 900px;
+      font-size: 16px;
+      text-align: center;
+      margin-bottom: 10px;
+    }
+    .map-container {
+      width: 100%;
+      max-width: 900px;  
+      margin: 20px auto;
+      margin-bottom: -30px;
+      text-align: center; 
+      display: flex;      
+      justify-content: center;
+    }
+    .pie-bar-container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: 100%;
+      max-width: 1000px;
+      margin: 20px auto;
+    }
+    #stacked-area-container {
+      display: flex;
+      flex-direction: column;
+      flex-wrap: wrap;
+      align-items: center; 
+      width: 100%;
+      max-width: 1000px;
+      margin: 20px auto;
+    }
+    #year-select-container {
+      margin-bottom: 10px;
+      text-align: center;
+    }
+    #year-select {
+      width: 150px; 
+    }
+    .chart-title {
+      font-family: 'Roboto';
+      font-weight: bold;
+      font-size: 14px;
+      margin-bottom: 4px;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Overall Title -->
+  <div class="overall-title">Australian Tourism</div>
+
+  <!-- New Subheading: An Overview -->
+  <div class="subheading">An Overview</div>
+
+  <!-- Centered text below the subheading "An Overview" -->
+  <div class="centered-text">
+    <p>Tourism is an important part of the Australian economy, providing jobs, supporting local businesses, and driving growth in various sectors. However, the industry faced unprecedented challenges due to the COVID-19 pandemic. This prolonged disruption led to significant losses in tourism expenditure, particularly from international visitors. As travel restrictions gradually lifted in 2022, the tourism industry began its path to recovery. Australia's enduring image as a safe, welcoming, and nature-filled destination drew visitors back. The resurgence of travel offers a fresh opportunity for Australian tourism operators to adapt to new consumer behaviours and travel trends. Whether exploring the outback or enjoying coastal getaways, the future of Australian tourism will depend on its ability to adapt and innovate for the new generation of tourists.</p>
+  </div>
+
+  <!-- New Subheading: What are the Main Tourist Destinations in Australia? -->
+  <div class="subheading">What are the Main Tourist Destinations in Australia?</div>
+
+  <!-- Container for the Map Chart -->
+  <div class="map-container">
+    <div id="map-chart"></div>
+  </div>
+
+  <!-- Section with writing under the map -->
+  <div class="centered-text" style="margin-top: 1px;">
+    <p>The most popular state to visit is New South Wales, followed by Victoria and Queensland. NSW boasts endless golden beaches, breathtaking natural treasures, and it's well-known, sparkling capital of Sydney. In the year ending June 2024, NSW welcomed 97.9 million domestic visitors, who spent $40.7 billion in the state. Domestic overnight visitors stayed a total of 117.0 million nights. NSW also welcomed 3.7 million international visitors. They stayed 99.1 million nights and spent $12.2 billion in the state. Popular attractions to visit include the Sydney Opera House, the Harbour Bridge, and Bondi Beach.</p>
+  </div>
+
+  <!-- New Subheading: What Are the Reasons for Visiting? -->
+  <div class="subheading">What are the Reasons for Visiting?</div>
+
+  <!-- Container for the Pie Chart -->
+  <div class="pie-bar-container">
+    <div class="chart-container">
+      <div class="chart-title">Reasons to Visit Australia</div>
+      <div id="pie-chart"></div>
+    </div>
+  </div>
+
+    <!-- Text below the pie chart -->
+  <div class="centered-text" style="margin-top: 1px;">
+    <p>In 2023, the main reason for visiting Australia was holiday travel, followed by visiting friends and relatives, and business. As the leading motivation for visiting Australia, holiday travel comprises around 40% of tourists. This aligns with Australia's reputation for stunning landscapes, unique wildlife, and vibrant cultural experiences. Visiting friends and family also represents a significant proportion of travellers, reflecting Australia's diverse population and strong international ties.</p>
+    </div>
+
+    <!-- New Subheading: Who is Visiting -->
+  <div class="subheading">Who is Visiting?</div>
+
+    <!-- Bar chart and heat map side by side -->
+<div class="chart-row">
+  <!-- Container for the Bar Chart -->
+  <div class="chart-container">
+    <div class="chart-title">Top 5 International Tourists</div>
+    <div id="bar_vis"></div>
+  </div>
+
+  <!-- Container for the Heat Map -->
+  <div class="chart-container">
+    <div class="chart-title">Tourist Behaviour in Top 5 Countries</div>
+    <div id="heatmap"></div>
+  </div>
+</div>
+
+  <!-- Text below the charts -->
+  <div class="centered-text" style="margin-top: 1px;">
+    <p>In 2023, New Zealand lead as the top source of international tourists to Australia, with China and the United States following closely behind. Interestingly, tourist behaviour varies across these countries. Visitors from China tend to spend the most and stay the longest, despite not leading in total trips. Meanwhile, tourists from New Zealand are the most frequent, although their spending and length of stay are comparatively lower.</p>
+    </div>
+
+  <!-- New Subheading: Day trips in Australia -->
+  <div class="subheading">Which Months are the Busiest for Day Trips?</div>
+
+  <!-- Container for the Stacked Area Chart with Dropdown above and centered -->
+  <div class="chart-container">
+    <div class="chart-title">Monthly Domestic Day Trips</div>
+    <div id="stacked-area-container">
+      <div id="year-select-container">
+        <label for="year-select">Select Year: </label>
+        <select id="year-select">
+          <option value="all">-select-</option>
+          <option value="2019">2019</option>
+          <option value="2022">2022</option>
+          <option value="2023">2023</option>
+        </select>
+      </div>
+      <div id="stacked-area-chart"></div>
+    </div>
+  </div>
+
+  <div class="centered-text">
+    <p>Australia boasts breath-taking natural scenery, which is why day trips are a highly popular option for a weekend getaway or short trip. As illustrated in the chart above, domestic day trips in Australia show a seasonal pattern with increases during holiday months like December. These trends highlight the significance of tourism during festive seasons, as Australians and visitors alike take advantage of the warm, summer climate and holiday breaks. The chart clearly shows a significant dip in 2022 as tourism activity was still subdued, but 2023 displays encouraging signs of recovery. Beyond the numbers, these trends hint at how the tourism industry may evolve in the coming years, with more emphasis on domestic travel as Australians continue to rediscover their own backyard. Destinations such as the Great Barrier Reef and Blue Mountains are expected to continue seeing high visitor numbers, as travel becomes more accessible and attractive.</p>
+  </div>  
+
+  <!-- New Subheading: Revenue and Economic Impact -->
+  <div class="subheading">Where does Tourist Spending go?</div>
+
+  <!-- New Subheading for the stacked bar chart -->
+  <div class="chart-title">Tourism Industry Revenue by Sector</div>
+
+  <!-- Container for the Stacked Bar Chart centered -->
+  <div class="chart-container">
+    <div id="stacked-bar-chart"></div>
+  </div>
+
+  <!-- Text below the stacked bar chart -->
+  <div class="centered-text" style="margin-top: 1px;">
+    <p>As seen in the chart above, the largest contributors to tourism revenue consist of transport, food, and accommodation services. Understandably, there was a fall in revenue post-pandemic, however it has steadily risen since, with a dramatic recovery evident in 2022-23. This recovery was driven by both domestic and international visitors returning to popular destinations and by the sustained efforts of businesses adapting to a post-pandemic environment. Sectors such as accommodation and food services benefitted greatly from increased demand, while transport services also saw substantial growth as air travel resumed. This trend highlights the critical role that tourism plays in supporting various industries, and how its rebound has vast implications for the overall economic landscape of Australia.</p>
+  </div>
+
+  <!-- Text below the stacked bar chart -->
+  <div class="centered-text" style="margin-top: 1px;">
+    <p>Created by Ria Parmar. Data and information provided by the Australian Trade and Investment Commission. Source: https://www.tra.gov.au/en</p>
+  </div>
+
+  <script type="text/javascript">
+    // Spec for the map chart with black bubbles for spending
+    var specMapWithBubbles = {
+      "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+      "background": null,
+      "width": 500,
+      "height": 500,
+      "data": {
+        "url": "./georef-australia-state@public (1).json",
+        "format": {
+          "type": "topojson",
+          "feature": "georef-australia-state@public"
+        }
+      },
+      "layer": [
+        {
+          "mark": {"type": "geoshape", "stroke": "black", "strokeWidth": 0.5},
+          "encoding": {
+            "color": {
+              "field": "NormalisedTrips",
+              "type": "quantitative",
+              "scale": {"scheme": "oranges"},
+              "title": "Percentage of Total Trips"
+            },
+            "tooltip": [
+              {"field": "properties.ste_name[0]", "type": "nominal", "title": "State"},
+              {"field": "NormalisedTrips", "type": "quantitative", "title": "Percentage of Total Trips (%)"}
+            ]
+          },
+          "transform": [
+            {
+              "lookup": "properties.ste_name[0]",
+              "from": {
+                "data": {
+                  "url": "./Map.csv"
+                },
+                "key": "State",
+                "fields": ["NormalisedTrips"]
+              }
+            }
+          ]
+        },
+        {
+          "data": {
+            "url": "./Map2.csv",  
+            "format": {"type": "csv"}
+          },
+          "mark": {
+            "type": "circle",
+            "color": "#4682B4"
+          },
+          "encoding": {
+            "longitude": {
+              "field": "longitude",
+              "type": "quantitative"
+            },
+            "latitude": {
+              "field": "latitude",
+              "type": "quantitative"
+            },
+            "size": {
+              "field": "Consumption 2022-23 (billions)",
+              "type": "quantitative",
+              "title": "Tourism Consumption (billions)",
+              "legend": {
+                "orient": "left"  
+              },
+              "scale": {
+                "range": [100, 1000]  // Increase this range to make bubbles larger overall
+                }
+            },
+            "tooltip": [
+              {"field": "State", "type": "nominal", "title": "State"},
+              {"field": "Consumption 2022-23 (billions)", "type": "quantitative", "title": "Tourism Consumption (billions)"}
+            ]
+          }
+        }
+      ],
+      "projection": {
+        "type": "mercator"
+      }
+    };
+
+    // Embed the updated map chart
+    vegaEmbed('#map-chart', specMapWithBubbles);
+
+    // Spec for the donut chart with custom colors and annotation
+var spec2 = {
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "background": null, 
+  "width": 270,  
+  "height": 270,
+  "config": {   
+    "view": {"stroke": null}  // Removes the outer stroke (border) of the chart
+  },
+  "data": {
+    "url": "./Piechart.csv",
+    "format": {"type": "csv"}
+  },
+  "layer": [
+    {
+      "mark": {
+        "type": "arc",
+        "innerRadius": 60  // This creates the hole for the donut chart
+      },
+      "encoding": {
+        "theta": {"field": "Value", "type": "quantitative"},
+        "color": {
+          "field": "Category", 
+          "type": "nominal", 
+          "title": "Category",
+          "scale": {
+            "range": [
+              "#4682B4",  
+              "#FFA500",  
+              "#FF6347",  
+              "#74C0BB",  
+              "#57A14E"   
+            ]
+          }
+        },
+        "tooltip": [
+          {"field": "Category", "type": "nominal", "title": "Category"},
+          {"field": "Value", "type": "quantitative", "title": "Number of Travelers", "format": ","}
+        ]
+      }
+    },
+    {
+      // Adding annotation as a text mark inside the red (Holiday travel) segment
+      "mark": {
+        "type": "text",
+        "color": "black",
+        "fontSize": 12,
+        "align": "center",
+        "font": "Roboto"
+      },
+      "encoding": {
+        "text": {"value": "Holiday travel ~ 40% of tourists"},
+        "x": {"value": 205},  // Adjust the x-coordinate to position within the red slice
+        "y": {"value": 175},   // Adjust the y-coordinate accordingly
+        "tooltip": null  // No tooltip for the annotation
+      }
+    }
+  ]
+};
+
+// Embed the donut chart
+vegaEmbed('#pie-chart', spec2);
+
+
+    // Spec for the bar chart
+    var spec4 = {
+      "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+      "background": null, 
+      "width": 220,  
+      "height": 250,
+      "data": {
+        "url": "./BarChart.csv"
+      },
+      "mark": {
+        "type": "bar",
+        "color": "#4682B4"
+      },
+      "encoding": {
+        "y": {  
+          "field": "Country",
+          "type": "nominal",
+          "title": "Country",
+          "sort": "-x"  
+        },
+        "x": {  
+          "field": "Trips",
+          "type": "quantitative",
+          "title": "Trips"
+        },
+        "tooltip": [
+          {"field": "Country", "type": "nominal", "title": "Country"},
+          {"field": "Trips", "type": "quantitative", "title": "Trips", "format": ","}  
+        ]
+      }
+    };
+
+    // Embed the bar chart
+    vegaEmbed('#bar_vis', spec4);
+
+    // Spec for the heat map
+    var heatmapSpec = {
+      "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+      "background": null,
+      "width": 250,
+      "height": 190,
+      "data": { "url": "./HeatMap.csv", "format": { "type": "csv" } },
+      "mark": "rect",
+      "encoding": {
+        "x": { "field": "Country", "type": "nominal", "title": "Country", "sort": null },
+        "y": { "field": "Metric", "type": "nominal", "title": "Category" },
+        "color": {
+          "field": "Value", "type": "quantitative", "title": "Normalised Value",
+          "scale": { "domain": [0, 1], "scheme": "oranges" }
+        },
+        "tooltip": [
+          { "field": "Country", "type": "nominal", "title": "Country" },
+          { "field": "Metric", "type": "nominal", "title": "Category" },
+          { "field": "Original Value", "type": "quantitative", "title": "Original Value", "format": "," }
+        ]
+      }
+    };
+    vegaEmbed('#heatmap', heatmapSpec);
+    
+    // Spec for the stacked area chart with spaced annotations
+var spec1 = {
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "background": null,
+  "width": 420,
+  "height": 220,
+  "data": {
+    "url": "./StackedAreaChart.csv",
+    "format": {"type": "csv"}
+  },
+  "layer": [
+    // Main area chart
+    {
+      "mark": "area",
+      "encoding": {
+        "x": {
+          "field": "Month",
+          "type": "ordinal",
+          "title": "Month",
+          "sort": ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
+        },
+        "y": {
+          "field": "Trips",
+          "type": "quantitative",
+          "title": "Number of Trips",
+          "axis": {"format": "s"}
+        },
+        "color": {
+          "field": "Year",
+          "type": "nominal",
+          "title": "Year",
+          "scale": {
+            "range": [  
+              "#FFA500",  // 2019
+              "#FF6347",  // 2022
+              "#57A14E"   // 2023
+            ]
+          }
+        },
+        "tooltip": [
+          {"field": "Year", "type": "nominal", "title": "Year"},
+          {"field": "Month", "type": "ordinal", "title": "Month"},
+          {"field": "Trips", "type": "quantitative", "title": "Trips", "format": ","}
+        ]
+      }
+    },
+    // Dashed Line for COVID-19 Pandemic
+    {
+      "mark": {
+        "type": "rule",
+        "strokeDash": [5, 5],  // Dashed line style
+        "color": "black"
+      },
+      "encoding": {
+        "x": {"datum": "December"}
+      }
+    },
+    // Add annotation
+    {
+      "mark": {
+        "type": "text",
+        "font": "Arial",
+        "lineBreak": "\n",
+        "fontSize": 12,
+        "fontWeight": "lighter",
+        "color": "black"
+      },
+      "encoding": {
+        "x": {"datum": "October"},
+        "y": {"datum": 63000000},
+        "text": {"value": "Greater trips for holiday\nmonths like December"},
+        "dy": -20,
+        "dx": 100  // Shift annotation to the left
+      }
+    }
+  ]
+};
+
+// Function to update the Stacked Area Chart based on year selection
+function updateChart(year) {
+  let updatedSpec = JSON.parse(JSON.stringify(spec1));
+
+  // Apply filtering by year
+  if (year !== 'all') {
+    updatedSpec.transform = [
+      {"filter": `datum.Year == '${year}'`}
+    ];
+  }
+
+  vegaEmbed('#stacked-area-chart', updatedSpec);
+}
+
+// Initial chart load with all years
+updateChart('all');
+
+// Add event listener to dropdown for year selection
+document.getElementById('year-select').addEventListener('change', function() {
+  var selectedYear = this.value;
+  updateChart(selectedYear);
+});
+
+
+    var stackedBarSpec = {
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "background": null,
+  "data": {
+    "url": "./StackedBarChart.csv",
+    "format": {"type": "csv"}
+  },
+  "transform": [
+    {
+      "fold": [
+        "2004-05", "2005-06", "2006-07", "2007-08", "2008-09", "2009-10", "2010-11", 
+        "2011-12", "2012-13", "2013-14", "2014-15", "2015-16", "2016-17", "2017-18",
+        "2018-19", "2019-20", "2020-21", "2021-22", "2022-23"
+      ],
+      "as": ["Year", "DirectTourismOutput"]
+    }
+  ],
+  "width": 450,
+  "height": 300,
+  "layer": [
+    {
+      "mark": "bar",
+      "encoding": {
+        "x": {
+          "field": "Year",
+          "type": "ordinal",
+          "title": "Year", 
+          "sort": {
+            "op": "sum", 
+            "field": "Industry"
+          }
+        },
+        "y": {
+          "aggregate": "sum",
+          "field": "DirectTourismOutput",
+          "type": "quantitative",
+          "title": "Direct Tourism Output (Billions)",
+          "axis": {
+            "format": "~s"
+          }
+        },
+        "color": {
+          "field": "Industry",
+          "type": "nominal",
+          "title": "Industry",
+          "scale": {
+            "range": [
+              "#F4A261",
+              "#F4A62F",
+              "#FCD56D",
+              "#74C0BB",
+              "#8BC47E",
+              "#B2D39F",
+              "#F7CAC9",
+              "#F08080",
+              "#C878C8"
+            ]
+          },
+          "title": "Industry"
+        },
+        "tooltip": [
+          {"field": "Industry", "type": "nominal", "title": "Industry"},
+          {"field": "Year", "type": "ordinal", "title": "Year"},
+          {"field": "DirectTourismOutput", "type": "quantitative", "title": "Output", "format": "$,.2f"}
+        ]
+      }
+    },
+    // Dashed Line for COVID-19 Pandemic
+    {
+      "mark": {
+        "type": "rule",
+        "strokeDash": [5, 5],  // Dashed line style
+        "color": "black"
+      },
+      "encoding": {
+        "x": {"datum": "2019-20"}
+      }
+    },
+    // Annotation Text for COVID-19 Impact
+    {
+      "mark": {
+        "type": "text",
+        "align": "left",
+        "dx": -52,
+        "dy": -12,
+        "color": "black",
+        "font": "Arial",
+        "fontSize": 12,
+        "lineBreak": "\n",
+        "fontWeight": "lighter"
+      },
+      "encoding": {
+        "x": {"datum": "2019-20"},
+        "y": {"value": 25},  
+        "text": {"value": "Covid-19"}
+      }
+    }
+  ]
+};
+
+// Embed the stacked bar chart
+vegaEmbed('#stacked-bar-chart', stackedBarSpec);
+
+  </script>
+
+</body>
+</html>

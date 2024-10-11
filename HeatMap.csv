@@ -1,0 +1,16 @@
+Country,Metric,Value,Original Value
+New Zealand,Trips,0.97,1200000
+New Zealand,Spending,0.28,2100000000
+New Zealand,Nights Spent,0.34,14200000
+China,Trips,0.60,746000
+China,Spending,1.00,7600000000
+China,Nights Spent,1.00,41900000
+USA,Trips,0.54,670000
+USA,Spending,0.28,2100000000
+USA,Nights Spent,0.27,11500000
+UK,Trips,0.47,581000
+UK,Spending,0.28,2100000000
+UK,Nights Spent,0.50,21200000
+India,Trips,0.32,395000
+India,Spending,0.18,1400000000
+India,Nights Spent,0.61,25400000
